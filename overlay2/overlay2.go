@@ -15,7 +15,7 @@ import (
 func SetUpFS(config config.Config) error{
 	source := "overlay"
 	mountType := "overlay"
-	target := "/tmp/toy-container/"+config.Id+"target"
+	target := "/tmp/toy-container/"+config.Id+"/target"
 	if err := os.MkdirAll(target, 777); err !=nil {
 		fmt.Println(err)
 		return err

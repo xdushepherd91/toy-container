@@ -17,6 +17,7 @@ var (
 func main() {
 
 	toyContainer.AddCommand(subCommand.RunCommand)
+	toyContainer.AddCommand(subCommand.InitCommand)
 	if err := toyContainer.Execute(); err != nil {
 		println("toy-container命令执行出错")
 		os.Exit(1)
