@@ -3,6 +3,7 @@ package subCommand
 import (
 	"github.com/spf13/cobra"
 	"toy-container/config"
+	"toy-container/overlay2"
 )
 /*
 	xdushepherd 2019/11/15 14:15
@@ -14,11 +15,12 @@ import (
  */
 
 
-var containerID string
-
+var (
+	containerID string
+	runConfig config.Config
+	)
 func init() {
 	RunCommand.Flags().StringVarP(&containerID,"container-id","d","default-id","容器id")
-	runConfig := &config.Config{}
 	runConfig.Id = containerID
 }
 
@@ -27,5 +29,8 @@ var RunCommand = &cobra.Command{
 	Short:                      "运行一个容器",
 	Long:                       "根据配置文件运行一个容器",
 	Run: func(cmd *cobra.Command, args []string) {
-
+		println("toy-container run go ")
+		if err := overlay2.SetUpFS(runConfig);err !=nil{
+			println("overlay2 run error")
+		}
 	}}
