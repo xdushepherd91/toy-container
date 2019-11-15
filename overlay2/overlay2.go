@@ -2,7 +2,7 @@ package overlay2
 
 import (
 	"toy-container/config"
-
+	"fmt"
 	"golang.org/x/sys/unix"
 )
 
@@ -15,7 +15,12 @@ func SetUpFS(config config.Config) error{
 	mountType := "overlay"
 	target := "/tmp/toy-container/target"
 	flag := uintptr(0)
-	data := "-o lowerdir=/tmp/toy-container/rootfs,upperdir=/tmp/toy-container/application,workdir=/tmp/toy-container/work"
+	data := "lowerdir=/tmp/toy-container/rootfs,upperdir=/tmp/toy-container/application,workdir=/tmp/toy-container/work"
 
-	return unix.Mount(source,target,mountType,flag,data)
+	if err := unix.Mount(source,target,mountType,flag,data); err !=nil {
+		fmt.Println(err)
+	}
+
+	return nil
+
 }
