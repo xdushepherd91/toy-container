@@ -39,7 +39,7 @@ var RunCommand = &cobra.Command{
 		if err := overlay2.SetUpFS(runConfig);err !=nil{
 			println("overlay2 run error")
 		}
-		toyInit := exec.Command("/proc/self/exe", "help")
+		toyInit := exec.Command("/proc/self/exe", "init")
 		if err := toyInit.Start() ; err != nil {
 			fmt.Println(err)
 			os.Exit(1)
