@@ -13,7 +13,7 @@ import (
 func SetUpFS(config config.Config) error{
 	source := "overlay"
 	mountType := "overlay"
-	target := "/tmp/toy-container/target"
+	target := "/tmp/toy-container/"+config.Id+"/target"
 	flag := uintptr(0)
 	data := "lowerdir=/tmp/toy-container/rootfs,upperdir=/tmp/toy-container/application,workdir=/tmp/toy-container/work"
 
@@ -22,5 +22,4 @@ func SetUpFS(config config.Config) error{
 	}
 
 	return nil
-
 }
