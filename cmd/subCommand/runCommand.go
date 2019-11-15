@@ -1,7 +1,10 @@
 package subCommand
 
 import (
+	"fmt"
 	"github.com/spf13/cobra"
+	"os"
+	"os/exec"
 	"toy-container/config"
 	"toy-container/overlay2"
 )
@@ -29,8 +32,22 @@ var RunCommand = &cobra.Command{
 	Short:                      "运行一个容器",
 	Long:                       "根据配置文件运行一个容器",
 	Run: func(cmd *cobra.Command, args []string) {
+		// 程序开始运行
 		println("toy-container run go ")
+
+		// 使用overlay2制作联合文件系统，等同于docker使用aufs基于镜像制作容器rootfs
 		if err := overlay2.SetUpFS(runConfig);err !=nil{
 			println("overlay2 run error")
 		}
+		toyInit := exec.Command("/proc/self/exe", "help")
+		if err := toyInit.Start() ; err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
+		if err := toyInit.Wait() ; err !=nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
 	}}
