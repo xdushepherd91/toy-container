@@ -1,3 +1,6 @@
+// +build linux,!gccgo
+
+
 package namespace
 
 

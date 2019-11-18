@@ -20,7 +20,8 @@ func init() {
 func main() {
 
 	toyContainer.AddCommand(initCommand)
-	println("toy-container enter");
+	toyContainer.AddCommand(runCommand)
+	println("toy-container enter")
 	if err := toyContainer.Execute(); err != nil {
 		println("toy-container命令执行出错")
 		os.Exit(1)

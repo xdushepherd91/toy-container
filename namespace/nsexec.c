@@ -11,7 +11,7 @@
 #define STACK_SIZE (1024 * 1024)
 static char child_stack[STACK_SIZE];
 
-int flag = CLONE_NEWIPC | CLONE_NEWNET | CLONE_NEWNS | CLONE_NEWPID | CLONE_NEWUTS |CLONE_NEWCGROUP;
+int flag = CLONE_NEWUTS;
 
 
 int child_func(void *arg){
@@ -28,9 +28,9 @@ void nsexec(void){
     */
 
 
-    int child_pid = clone(child_func,child_stack+STACK_SIZE,flag,NULL);
+    int child_pid = clone(child_func,child_stack+STACK_SIZE,CLONE_NEWUTS | SIGCHLD,NULL);
 
     printf("child pid is %d",child_pid);
-
+    
     exit(0);
 }
