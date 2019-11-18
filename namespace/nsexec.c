@@ -27,7 +27,7 @@ void nsexec(void){
        1. clone子进程，使得子进程可以进入新的命名空间
     */
 
-    if(1){
+    if(!getenv("init_process")){
     	return;
     }
 

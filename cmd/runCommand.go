@@ -39,11 +39,18 @@ var runCommand = &cobra.Command{
 		if err := overlay2.SetUpFS(runConfig);err !=nil{
 			println("overlay2 run error")
 		}
+
+		// xdushepherd 2019/11/18 14:11 为int程序设定管道环境变量，以便可以进行命名空间的初始化工作
+
 		toyInit := exec.Command("/proc/self/exe", "init")
+
+		toyInit.Env = append(toyInit.Env,fmt.Sprint("init_process=1"))
+
 		if err := toyInit.Start() ; err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
+
 
 		if err := toyInit.Wait() ; err !=nil {
 			fmt.Println(err)
