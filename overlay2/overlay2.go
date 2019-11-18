@@ -34,5 +34,6 @@ func SetUpFS(config config.Config) error{
 		fmt.Println(err)
 	}
 
+	println("target文件系统mount成功")
 	return nil
 }
