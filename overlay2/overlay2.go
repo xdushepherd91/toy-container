@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"toy-container/config"
-
 	"golang.org/x/sys/unix"
 )
 
@@ -31,5 +30,9 @@ func SetUpFS(config config.Config) error{
 	flag := uintptr(0)
 	data := "lowerdir=/tmp/toy-container/rootfs,upperdir=/tmp/toy-container/application,workdir=/tmp/toy-container/work"
 
-	return unix.Mount(source,target,mountType,flag,data)
+	if err := unix.Mount(source,target,mountType,flag,data); err !=nil {
+		fmt.Println(err)
+	}
+
+	return nil
 }
