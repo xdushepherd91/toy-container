@@ -11,10 +11,10 @@ import (
 
 
 func init(){
-	println( "InitCommand begin")
+	println( "initCommand begin")
 }
 
-var InitCommand = &cobra.Command{
+var initCommand = &cobra.Command{
 	Use:                        "init",
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := os.MkdirAll("/home/node1/Desktop/"+strconv.Itoa(os.Getpid()),777) ;err !=nil{

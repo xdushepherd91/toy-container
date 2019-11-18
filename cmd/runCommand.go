@@ -23,11 +23,11 @@ var (
 	runConfig config.Config
 	)
 func init() {
-	Runcommand.Flags().StringVarP(&containerID,"container-id","d","default-id","容器id")
+	runCommand.Flags().StringVarP(&containerID,"container-id","d","default-id","容器id")
 	runConfig.Id = containerID
 }
 
-var Runcommand = &cobra.Command{
+var runCommand = &cobra.Command{
 	Use:                        "run [containerID]",
 	Short:                      "运行一个容器",
 	Long:                       "根据配置文件运行一个容器",

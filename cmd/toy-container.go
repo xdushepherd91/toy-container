@@ -19,8 +19,9 @@ func init() {
 
 func main() {
 
-	toyContainer.AddCommand(InitCommand)
-	toyContainer.AddCommand(Runcommand)
+
+	toyContainer.AddCommand(initCommand)
+	toyContainer.AddCommand(runCommand)
 	println("toy-container enter")
 	if err := toyContainer.Execute(); err != nil {
 		println("toy-container命令执行出错")

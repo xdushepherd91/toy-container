@@ -27,6 +27,9 @@ void nsexec(void){
        1. clone子进程，使得子进程可以进入新的命名空间
     */
 
+    if(1){
+    	return;
+    }
 
     int child_pid = clone(child_func,child_stack+STACK_SIZE,CLONE_NEWUTS | SIGCHLD,NULL);
 
