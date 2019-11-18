@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
+	"github.com/urfave/cli"
 	"os"
 	"os/exec"
 	"toy-container/config"
@@ -23,15 +23,14 @@ var (
 	runConfig config.Config
 	)
 func init() {
-	runCommand.Flags().StringVarP(&containerID,"container-id","d","default-id","容器id")
-	runConfig.Id = containerID
+	runConfig.Id = "default-id"
 }
 
-var runCommand = &cobra.Command{
-	Use:                        "run [containerID]",
-	Short:                      "运行一个容器",
-	Long:                       "根据配置文件运行一个容器",
-	Run: func(cmd *cobra.Command, args []string) {
+
+var runCommand = cli.Command{
+	Name:  "init",
+	Usage: `initialize the namespaces and launch the process (do not call it outside of runc)`,
+	Action: func(context *cli.Context) error {
 		// 程序开始运行
 		println("toy-container run go ")
 
@@ -56,6 +55,7 @@ var runCommand = &cobra.Command{
 			fmt.Println(err)
 			os.Exit(1)
 		}
-
-	}}
+		return nil
+	},
+}
 

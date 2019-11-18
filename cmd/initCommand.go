@@ -2,11 +2,11 @@ package main
 
 
 import (
-	"github.com/spf13/cobra"
+	"github.com/urfave/cli"
 	"os"
 	"strconv"
 	"syscall"
-        _ "toy-container/namespace"
+	_ "toy-container/namespace"
 )
 
 
@@ -14,9 +14,10 @@ func init(){
 	println( "initCommand begin")
 }
 
-var initCommand = &cobra.Command{
-	Use:                        "init",
-	Run: func(cmd *cobra.Command, args []string) {
+var initCommand = cli.Command{
+	Name:  "init",
+	Usage: `initialize the namespaces and launch the process (do not call it outside of runc)`,
+	Action: func(context *cli.Context) error {
 		if err := os.MkdirAll("/home/node1/Desktop/"+strconv.Itoa(os.Getpid()),777) ;err !=nil{
 			println("mkdir error")
 			os.Exit(1)
@@ -25,8 +26,12 @@ var initCommand = &cobra.Command{
 		if err := initContainer(); err != nil {
 			println("init container error")
 		}
+
+		return nil
 	},
 }
+
+
 
 func initContainer() error {
 	/*
