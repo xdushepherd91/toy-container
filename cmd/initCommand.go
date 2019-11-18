@@ -37,6 +37,8 @@ func initContainer() error {
 		applicationCommand := config.ApplicationCmd
 	 */
 
+	println("in init command")
+
 	applicationCommand := "echo";
 	args := []string{
 		"$HOSTNAME",">>","/opt/test.txt",
