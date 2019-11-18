@@ -5,6 +5,8 @@
 #include <sched.h>
 #include <signal.h>
 #include <unistd.h>
+#include <stdlib.h>
+
 
 #define STACK_SIZE (1024 * 1024)
 static char child_stack[STACK_SIZE];
@@ -12,9 +14,10 @@ static char child_stack[STACK_SIZE];
 int flag = CLONE_NEWIPC | CLONE_NEWNET | CLONE_NEWNS | CLONE_NEWPID | CLONE_NEWUTS |CLONE_NEWCGROUP;
 
 
-void child_func(void){
-    sethostname("In Namespace", 12);
-    return;
+int child_func(void *arg){
+    int result =  sethostname("In Namespace", 12);
+    printf("sethostname's result is %d",result);
+    return 1;
 }
 
 void nsexec(void){
@@ -25,9 +28,9 @@ void nsexec(void){
     */
 
 
-    int child_pid = clone(child_func,child_stack+STACK_SIZE,flag);
+    int child_pid = clone(child_func,child_stack+STACK_SIZE,flag,NULL);
 
-
+    printf("child pid is %d",child_pid);
 
     exit(0);
 }
