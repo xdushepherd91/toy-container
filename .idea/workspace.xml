@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a7344d3d-57d2-4792-89c3-126ba1d89997" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/namespace/namespace.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/namespace/nsexec.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmd/subCommand/initCommand.go" beforeDir="false" afterPath="$PROJECT_DIR$/cmd/subCommand/initCommand.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/overlay2/overlay2.go" beforeDir="false" afterPath="$PROJECT_DIR$/overlay2/overlay2.go" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
