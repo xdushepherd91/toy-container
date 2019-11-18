@@ -3,7 +3,6 @@ package main
 import (
 	"github.com/spf13/cobra"
 	"os"
-	"toy-container/cmd/subCommand"
 )
 
 var (
@@ -14,10 +13,14 @@ var (
 	}
 )
 
+func init() {
+	println("toy-container init")
+}
+
 func main() {
 
-	toyContainer.AddCommand(subCommand.RunCommand)
-	toyContainer.AddCommand(subCommand.InitCommand)
+	toyContainer.AddCommand(initCommand)
+	println("toy-container enter");
 	if err := toyContainer.Execute(); err != nil {
 		println("toy-container命令执行出错")
 		os.Exit(1)

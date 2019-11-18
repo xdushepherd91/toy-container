@@ -1,4 +1,4 @@
-package subCommand
+package main
 
 
 import (
@@ -6,7 +6,7 @@ import (
 	"os"
 	"strconv"
 	"syscall"
-	_ "toy-container/namespace"
+        _ "toy-container/namespace"
 )
 
 
@@ -14,7 +14,7 @@ func init(){
 	println( "initCommand begin")
 }
 
-var InitCommand = &cobra.Command{
+var initCommand = &cobra.Command{
 	Use:                        "init",
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := os.MkdirAll("/home/node1/Desktop/"+strconv.Itoa(os.Getpid()),777) ;err !=nil{
