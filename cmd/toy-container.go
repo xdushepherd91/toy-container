@@ -6,7 +6,6 @@ import (
 )
 
 
-
 func init() {
 	println("toy-container init")
 }
