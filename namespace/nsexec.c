@@ -26,8 +26,7 @@ void nsexec(void){
        xdushepherd 2019/11/18 9:15
        1. clone子进程，使得子进程可以进入新的命名空间
     */
-
-    if(!getenv("init_process")){
+    if(!getenv("_LIBCONTAINER_INITPIPE")){
     	return;
     }
 

@@ -44,7 +44,7 @@ var runCommand = &cobra.Command{
 
 		toyInit := exec.Command("/proc/self/exe", "init")
 
-		toyInit.Env = append(toyInit.Env,fmt.Sprint("init_process=1"))
+		toyInit.Env = append(toyInit.Env,fmt.Sprint("_LIBCONTAINER_INITPIPE=%d",1))
 
 		if err := toyInit.Start() ; err != nil {
 			fmt.Println(err)
