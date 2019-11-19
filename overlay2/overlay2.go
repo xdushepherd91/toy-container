@@ -22,13 +22,13 @@ import (
 func SetUpFS(config config.Config) error{
 	source := "overlay"
 	mountType := "overlay"
-	target := "/tmp/toy-container/"+config.Id+"/target"
+	target := "/opt/toy-container/"+config.Id+"/target"
 	if err := os.MkdirAll(target, 777); err !=nil {
 		fmt.Println(err)
 		return err
 	}
 	flag := uintptr(0)
-	data := "lowerdir=/tmp/toy-container/rootfs,upperdir=/tmp/toy-container/application,workdir=/tmp/toy-container/work"
+	data := "lowerdir=/opt/toy-container/rootfs,upperdir=/opt/toy-container/application,workdir=/opt/toy-container/work"
 
 	if err := unix.Mount(source,target,mountType,flag,data); err !=nil {
 		fmt.Println(err)

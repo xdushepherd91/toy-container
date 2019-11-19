@@ -6,12 +6,9 @@ import (
 )
 
 
-func init() {
-	println("toy-container init")
-}
-
 func main() {
 
+	println("main init")
 	toyContainer := cli.NewApp()
 	toyContainer.Usage = "toy-container"
 	toyContainer.Name = "toy-container"
@@ -20,7 +17,6 @@ func main() {
 		initCommand,
 		runCommand,
 	}
-
 
 	if err := toyContainer.Run(os.Args); err != nil {
 		os.Exit(1)

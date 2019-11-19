@@ -9,8 +9,8 @@ import (
 	"toy-container/overlay2"
 )
 /*
-	xdushepherd 2019/11/15 14:15
-	run方法需要做的事情：
+    xdushepherd 2019/11/15 14:15
+    run方法需要做的事情：
     1. 解析配置信息
     2. 根据配置信息的rootfs路径构建overlay2文件系统用于容器运行时
     3. 启动进程，进行命名空间的设置
@@ -21,16 +21,16 @@ import (
 var (
 	containerID string
 	runConfig config.Config
-	)
+    )
 func init() {
 	runConfig.Id = "default-id"
 }
 
 
 var runCommand = cli.Command{
-	Name:  "init",
+	Name:  "run",
 	Usage: `initialize the namespaces and launch the process (do not call it outside of runc)`,
-	Action: func(context *cli.Context) error {
+	Action: func(context *cli.Context) {
 		// 程序开始运行
 		println("toy-container run go ")
 
@@ -43,7 +43,7 @@ var runCommand = cli.Command{
 
 		toyInit := exec.Command("/proc/self/exe", "init")
 
-		toyInit.Env = append(toyInit.Env,fmt.Sprint("_LIBCONTAINER_INITPIPE=%d",1))
+		toyInit.Env = append(toyInit.Env,fmt.Sprint("_LIBCONTAINER_INITPIPE=1"))
 
 		if err := toyInit.Start() ; err != nil {
 			fmt.Println(err)
@@ -51,11 +51,15 @@ var runCommand = cli.Command{
 		}
 
 
-		if err := toyInit.Wait() ; err !=nil {
+		println("init calling")
+
+/*		if err := toyInit.Wait() ; err !=nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
-		return nil
+
+		*/
+		println("everything is ok");
 	},
 }
 

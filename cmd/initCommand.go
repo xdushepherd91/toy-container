@@ -2,8 +2,10 @@ package main
 
 
 import (
+	"fmt"
 	"github.com/urfave/cli"
 	"os"
+	"os/exec"
 	"strconv"
 	"syscall"
 	_ "toy-container/namespace"
@@ -17,17 +19,16 @@ func init(){
 var initCommand = cli.Command{
 	Name:  "init",
 	Usage: `initialize the namespaces and launch the process (do not call it outside of runc)`,
-	Action: func(context *cli.Context) error {
+	Action: func(context *cli.Context) {
 		if err := os.MkdirAll("/home/node1/Desktop/"+strconv.Itoa(os.Getpid()),777) ;err !=nil{
 			println("mkdir error")
 			os.Exit(1)
 		}
 
 		if err := initContainer(); err != nil {
-			println("init container error")
+			fmt.Println(err)
 		}
 
-		return nil
 	},
 }
 
@@ -42,11 +43,13 @@ func initContainer() error {
 		applicationCommand := config.ApplicationCmd
 	 */
 
-	println("in init command")
 
-	applicationCommand := "echo";
+	applicationCommand , err := exec.LookPath("sh");
+        if err != nil {
+           panic(err)
+        }
 	args := []string{
-		"$HOSTNAME",">>","/opt/test.txt",
+		"/home/test.sh",
 	}
 
 	if err := syscall.Exec(applicationCommand, args, os.Environ()); err != nil {
