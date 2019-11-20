@@ -35,4 +35,3 @@ var execCommand = cli.Command{
 
 	},
 }
->>>>>>> execCommand-test
