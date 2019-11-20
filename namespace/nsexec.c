@@ -71,7 +71,7 @@ void nsexec(void){
 
                    printf("child pid is %d\n",child_pid);
 
-                   fp = fopen("/opt/toy-container/child_pid.txt", "w+");
+                   fp = fopen("./run/default-id/child_pid.txt", "w+");
                    fprintf(fp, "%d","child_pid");
 
                    waitpid(child_pid, NULL, 0);
