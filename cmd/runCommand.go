@@ -5,8 +5,8 @@ import (
 	"github.com/urfave/cli"
 	"os"
 	"os/exec"
-	"toy-container/config"
 	"toy-container/overlay2"
+	"toy-container/util"
 )
 /*
     xdushepherd 2019/11/15 14:15
@@ -18,26 +18,48 @@ import (
  */
 
 
-var (
-	containerID string
-	runConfig config.Config
-    )
-func init() {
-	runConfig.Id = "default-id"
-}
-
 
 var runCommand = cli.Command{
 	Name:  "run",
-	Usage: `initialize the namespaces and launch the process (do not call it outside of runc)`,
+	Usage: `根据指定的容器id创建容器并运行`,
+	Flags: []cli.Flag{
+		cli.StringFlag{
+			Name:        "id,d",
+			Usage:       "容器名称",
+			Value:       "default-id",
+		},
+	},
 	Action: func(context *cli.Context) {
-		// 程序开始运行
-		println("toy-container run go ")
+
+		var id string
+		if id = context.String("id");id=="" {
+			fmt.Println("容器id不能为空")
+		}
+		// 从配置文件中读取配置信息
+		runConfig,err := util.LoadConfig(configPath)
+
+		if err != nil  {
+			fmt.Println(err)
+			os.Exit(1)
+
+		}
+
+
+		runConfig.Id = id
+		if runConfig.MountSource == "" {
+			runConfig.MountSource = mountSource
+		}
+		if runConfig.MountType == "" {
+			runConfig.MountType = mountType
+		}
+		runConfig.ContainerPath = toyContainerRootPath+"/"+id
+
 
 		// 使用overlay2制作联合文件系统，等同于docker使用aufs基于镜像制作容器rootfs
 		if err := overlay2.SetUpFS(runConfig);err !=nil{
 			println("overlay2 run error")
 		}
+
 
 		// xdushepherd 2019/11/18 14:11 为int程序设定管道环境变量，以便可以进行命名空间的初始化工作
 

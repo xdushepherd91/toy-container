@@ -5,4 +5,12 @@ type Config struct {
 	ImagePath string
 	ContainerPath string
 	ApplicationCmd string
+	MountType string
+	MountSource string
+}
+
+
+type State struct {
+	Pid string
+	root string
 }

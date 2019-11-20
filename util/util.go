@@ -1,11 +1,13 @@
 package util
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
-	"strings"
 	"strconv"
+	"strings"
+	"toy-container/config"
 )
 
 func GetPidFromFile(path string) []byte {
@@ -65,10 +67,66 @@ func ParsePid( pids []byte) int  {
 	return pid
 }
 
-//func MountNamespace(source,dest string) error {
-//	if err := syscall.Mount(source,dest,"bind",uintptr(0),"");err !=nil{
-//		fmt.Println(err)
-//		return err
-//	}
-//	return nil
-//}
+func saveConfig(config config.Config,path string) error {
+
+	fp , err := os.OpenFile(path,os.O_CREATE,0)
+	if err != nil {
+		return handleError(err)
+	}
+
+	data ,err := json.Marshal(config)
+	if err != nil {
+		return handleError(err)
+	}
+
+	_,err  = fp.Write(data)
+
+	return nil
+}
+
+func LoadConfig(path string)   (config.Config,error)  {
+
+	var result config.Config
+	/*
+		xdushepherd 2019/11/20 17:51
+		打开文件
+	 */
+	fp,err := os.Open(path)
+	if err != nil{
+		return result, handleError(err)
+	}
+	defer fp.Close()
+
+	bytes,err := ioutil.ReadAll(fp)
+
+	if err != nil {
+		return result,handleError(err)
+	}
+
+
+
+	err = json.Unmarshal(bytes,&result)
+
+	if err != nil {
+		return result, handleError(err)
+	}
+
+	return result,nil
+}
+
+func IsDirOrFileExist(path string) bool {
+
+	_,err := os.Stat(path)
+	if err == nil {
+		return true;
+	}
+
+
+	return false
+}
+
+
+func handleError(err error) error {
+	fmt.Println(err)
+	return err
+}

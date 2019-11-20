@@ -20,17 +20,36 @@ import (
     4. 其他
  */
 func SetUpFS(config config.Config) error{
-	source := "overlay"
-	mountType := "overlay"
-	target := "/opt/toy-container/"+config.Id+"/target"
-	if err := os.MkdirAll(target, 777); err !=nil {
+	/*
+		xdushepherd 2019/11/20 19:48
+		生成容器根目录，用于容纳overlay2相关目录
+	 */
+	containerRoot := config.ContainerPath
+	if err := os.Mkdir(containerRoot, 777); err !=nil {
 		fmt.Println(err)
 		return err
 	}
-	flag := uintptr(0)
-	data := "lowerdir=/opt/toy-container/rootfs,upperdir=/opt/toy-container/application,workdir=/opt/toy-container/work"
 
-	if err := unix.Mount(source,target,mountType,flag,data); err !=nil {
+	flag := uintptr(0)
+
+	bases := []string{
+		"rootfs",
+		"testfs",
+	}
+
+	lowerDir := "lowerdir="
+	for _,dir := range bases {
+		lowerDir =  lowerDir + containerRoot+"/" + dir
+	}
+
+	applicationDir := containerRoot + "/app/"
+	upperDir := " upperdir="+"/"+applicationDir
+	workdir := containerRoot + "/work"
+	merged := containerRoot + "/merged"
+
+	data := lowerDir+ "," +upperDir + "," + workdir
+
+	if err := unix.Mount(config.MountSource,merged,config.MountType,flag,data); err !=nil {
 		fmt.Println(err)
 	}
 
