@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"strings"
 	"strconv"
 )
 
@@ -53,7 +54,7 @@ func IsDir(path string) bool  {
 func ParsePid( pids []byte) int  {
 	var pid int
 
-	pid_str := string(pids)
+	pid_str := strings.Replace(string(pids), "\n", "", -1)
 
 	pid, err := strconv.Atoi(pid_str)
 

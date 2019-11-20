@@ -60,15 +60,19 @@ func initContainer() error {
 	 */
 
 
+	println("init container")
 	applicationCommand , err := exec.LookPath("sh");
         if err != nil {
            panic(err)
         }
 	args := []string{
+		"sh",
 		"/home/test.sh",
+		"&",
 	}
 
-	if err := syscall.Exec(applicationCommand, args, os.Environ()); err != nil {
+	if err := syscall.Exec(applicationCommand, args[0:], os.Environ()); err != nil {
+		fmt.Println(err)
 		return err
 	}
 

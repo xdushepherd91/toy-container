@@ -15,7 +15,9 @@ func main() {
 
 	toyContainer.Commands =[]cli.Command{
 		initCommand,
+		execCommand,
 		runCommand,
+
 	}
 
 	if err := toyContainer.Run(os.Args); err != nil {
