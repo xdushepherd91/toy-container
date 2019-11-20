@@ -5,7 +5,6 @@ import (
 	"io/ioutil"
 	"os"
 	"strconv"
-	"syscall"
 )
 
 func GetPidFromFile(path string) []byte {
@@ -26,6 +25,31 @@ func GetPidFromFile(path string) []byte {
 	return pidArray
 }
 
+func FileExists(path string) bool {
+
+	_,err := os.Stat(path)
+	if err != nil {
+		fmt.Println(err)
+		if os.IsExist(err){
+			return true
+		}
+		return false
+	}
+
+	return true
+}
+
+func IsDir(path string) bool  {
+
+	s,err := os.Stat(path)
+	if err != nil {
+		fmt.Println(err)
+		return false
+	}
+	return s.IsDir()
+}
+
+
 func ParsePid( pids []byte) int  {
 	var pid int
 
@@ -40,10 +64,10 @@ func ParsePid( pids []byte) int  {
 	return pid
 }
 
-func MountNamespace(source,dest string) error {
-	if err := syscall.Mount(source,dest,"bind",uintptr(0),"");err !=nil{
-		fmt.Println(err)
-		return err
-	}
-	return nil
-}
+//func MountNamespace(source,dest string) error {
+//	if err := syscall.Mount(source,dest,"bind",uintptr(0),"");err !=nil{
+//		fmt.Println(err)
+//		return err
+//	}
+//	return nil
+//}
