@@ -1,6 +1,5 @@
 package main
 
-
 import (
 	"fmt"
 	"github.com/urfave/cli"
@@ -32,6 +31,23 @@ var initCommand = cli.Command{
 	},
 }
 
+/*
+	xdushepherd 2019/11/19 18:33
+	1. 读取pid记录文件，获取有toy-container启动的进程id
+    2. 通过pid，将进程的命名空间存下来，以便后续程序使用
+ */
+
+func mountNamespace() error {
+
+	////从指定目录获取pid
+	//pidArray := util.GetPidFromFile("./run/default-id/child_pid.txt")
+	//pid := util.ParsePid(pidArray)
+	//
+	//
+
+
+	return nil
+}
 
 
 func initContainer() error {
