@@ -71,8 +71,8 @@ void nsexec(void){
 
                    printf("child pid is %d\n",child_pid);
 
-                   fp = fopen("/opt/toy-container/parent.txt", "w+");
-                   fprintf(fp, "This is testing for fprintf...%s  \n","parent");		 
+                   fp = fopen("/opt/toy-container/child_pid.txt", "w+");
+                   fprintf(fp, "%d","child_pid");
 
                    waitpid(child_pid, NULL, 0);
                    exit(0);
@@ -112,7 +112,7 @@ void nsexec(void){
                  }		  
 
                  printf("\nok\n");
-                 setenv("PS1", "[\\u@\\H \\W]", 0); 
+                 setenv("PS1", "[\\u@\\H \\W] #", 0);
 		 execv(child_args[0], child_args);	
                  printf("something wrong\n");
 
