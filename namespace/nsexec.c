@@ -67,14 +67,17 @@ void nsexec(void){
     switch (setjmp(env)) {
 
 	   case 0:{
-                   int child_pid = clone_parent(&env,1);
+                   
+	           int child_pid = clone_parent(&env,1);
 
                    printf("child pid is %d\n",child_pid);
 
-                   fp = fopen("./run/default-id/child_pid.txt", "w+");
-                   fprintf(fp, "%d","child_pid");
-
-                   waitpid(child_pid, NULL, 0);
+                   fp = fopen("/opt/toy-container/child_pid.txt", "w+");
+                   fprintf(fp, "%d",child_pid);
+       
+       		   //printf("pid data persistence");		   
+		   fclose(fp);
+		   waitpid(child_pid, NULL, 0);
                    exit(0);
 
 		  }
@@ -92,13 +95,13 @@ void nsexec(void){
                   if (mount("none", "/opt/toy-container/default-id/target/tmp", "tmpfs", 0, NULL)!=0) {
                         perror("tmp");
                   }
-/*    if (mount("udev", "/opt/toy-container/rootfs/dev", "devtmpfs", 0, NULL)!=0) {
-        perror("dev");
-    }*/
+                  if (mount("udev", "/opt/toy-container/rootfs/dev", "devtmpfs", 0, NULL)!=0) {
+                       perror("dev");
+                  }
                  if (mount("devpts", "/opt/toy-container/default-id/target/dev/pts", "devpts", 0, NULL)!=0) {
                         perror("dev/pts");
                  }
-                 if (mount("shm", "/opt/toy-container/default-id/target/shm", "tmpfs", 0, NULL)!=0) {
+                 if (mount("shm", "/opt/toy-container/default-id/target/dev/shm", "tmpfs", 0, NULL)!=0) {
                         perror("dev/shm");
                  }
                  if (mount("tmpfs", "/opt/toy-container/default-id/target/run", "tmpfs", 0, NULL)!=0) {
@@ -114,8 +117,8 @@ void nsexec(void){
                  printf("\nok\n");
                  setenv("PS1", "[\\u@\\H \\W] #", 0);
 		 execv(child_args[0], child_args);	
-                 printf("something wrong\n");
-
+		 
+//		 return;
 		 exit(0);
 	 }
 
