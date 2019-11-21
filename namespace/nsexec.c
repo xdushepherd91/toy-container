@@ -222,7 +222,7 @@ void join_namespaces(char *nslist)
 			perror("failed to parse ");
 		*path++ = '\0';
 
-		fd = fopen(path, "r");
+		fd =  open(path, O_RDONLY);
 		if (fd < 0)
 			perror("failed to open ");
 
@@ -265,9 +265,9 @@ void nsexec(void){
 	 * 用于从环境变量中获取消息通信的pipenum
 	 */
 	int pipenum = initpipe();
-	if (pipenum == -1)
+	if (pipenum == -1){
 		return;
-
+    }
     /*
         xdushepherd 2019/11/21 14:40
         用于区分是否是是新建namespace还是setns
