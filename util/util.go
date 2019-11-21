@@ -3,6 +3,7 @@ package util
 import (
 	"encoding/json"
 	"fmt"
+	"golang.org/x/sys/unix"
 	"io/ioutil"
 	"os"
 	"strconv"
@@ -125,8 +126,21 @@ func IsDirOrFileExist(path string) bool {
 	return false
 }
 
+func NewSocketPair(name string) (parent *os.File, child *os.File,err error) {
+
+	fds,err := unix.Socketpair(unix.AF_LOCAL,unix.SOCK_STREAM|unix.SOCK_CLOEXEC,0)
+	if err != nil {
+		return nil,nil,err
+	}
+
+	return os.NewFile(uintptr(fds[0]),name+"-p"),os.NewFile(uintptr(fds[1]),name+"-c"),nil
+
+
+}
 
 func handleError(err error) error {
 	fmt.Println(err)
 	return err
 }
+
+

@@ -12,6 +12,8 @@ const (
 	toyContainerRootPath = "/var/lib/toyContainer/overlay2"
 	mountType = "overlay2"
 	mountSource = "overlay2"
+	stdFdsCount = 3
+	ToyContainerRunPath = "/run/toy-contaienr"
 )
 
 
