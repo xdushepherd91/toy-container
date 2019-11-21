@@ -19,7 +19,7 @@ import (
     3. 手动创建workdir目录
     4. 其他
  */
-func SetUpFS(config config.Config) error{
+func SetUpFS(config *config.Config) {
 	/*
 		xdushepherd 2019/11/20 19:48
 		生成容器根目录，用于容纳overlay2相关目录
@@ -27,7 +27,6 @@ func SetUpFS(config config.Config) error{
 	containerRoot := config.ContainerPath
 	if err := os.Mkdir(containerRoot, 777); err !=nil {
 		fmt.Println(err)
-		return err
 	}
 
 	flag := uintptr(0)
@@ -53,6 +52,4 @@ func SetUpFS(config config.Config) error{
 		fmt.Println(err)
 	}
 
-	println("target文件系统mount成功")
-	return nil
 }

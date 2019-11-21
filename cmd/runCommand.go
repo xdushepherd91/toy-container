@@ -1,10 +1,14 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/urfave/cli"
+	"github.com/vishvananda/netlink/nl"
+	"io"
 	"os"
 	"os/exec"
+	"toy-container/message"
 	"toy-container/overlay2"
 	"toy-container/util"
 )
@@ -56,32 +60,69 @@ var runCommand = cli.Command{
 
 
 		// 使用overlay2制作联合文件系统，等同于docker使用aufs基于镜像制作容器rootfs
-		if err := overlay2.SetUpFS(runConfig);err !=nil{
-			println("overlay2 run error")
-		}
+		overlay2.SetUpFS(&runConfig)
 
+		// 初始化管道，用于toy-container run 进程与 toy-container init 进程之间进行通信
+
+		parentInitPipe,childInitPipe,err := util.NewSocketPair("init")
 
 		// xdushepherd 2019/11/18 14:11 为int程序设定管道环境变量，以便可以进行命名空间的初始化工作
-
 		toyInit := exec.Command("/proc/self/exe", "init")
 
-		toyInit.Env = append(toyInit.Env,fmt.Sprint("_LIBCONTAINER_INITPIPE=1"))
+		// xdushepherd 2019/11/21 10:14	将init进程需要使用的管道复制给toyInit
+
+		toyInit.ExtraFiles = append(toyInit.ExtraFiles,childInitPipe)
+
+		toyInit.Env = append(toyInit.Env,fmt.Sprintf("_LIBCONTAINER_INITPIPE=%d",stdFdsCount+len(toyInit.ExtraFiles)-1))
+
+		toyInit.Env = append(toyInit.Env,fmt.Sprintf("_TOYCONTAINER_EXEC=%d",0))
 
 		if err := toyInit.Start() ; err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
 
+		nr := nl.NewNetlinkRequest(int(message.InitMsg), 0)
 
-		println("init calling")
+		//xdushepherd 2019/11/21 13:01 添加cloneFlags参数
+		nr.AddData(&message.Int32msg{
+			Type:  message.CloneFlagsAttr,
+			Value: uint32(runConfig.CloneFlags),
+		})
 
-/*		if err := toyInit.Wait() ; err !=nil {
+		//xdushepherd 2019/11/21 14:07 添加pid路径，用于init进程存储容器进程数据
+		nr.AddData(&message.Bytemsg{
+			Type:  message.PidPath,
+			Value: []byte(runConfig.PidPath),
+		})
+
+
+		//xdushepherd 2019/11/21 14:09 添加容器运行根目录数据，用于init进程进行数据挂以及chroot
+		nr.AddData(&message.Bytemsg{
+			Type:  message.ContainerPath,
+			Value: []byte(runConfig.ContainerPath),
+		})
+
+		//xdushepherd 2019/11/21 14:26	添加容器id，用于init进程设置容器hostname
+
+		nr.AddData(&message.Bytemsg{
+			Type:  message.Id,
+			Value: []byte(runConfig.Id),
+		})
+
+
+		fp := bytes.NewReader(nr.Serialize())
+
+		if _,err := io.Copy(parentInitPipe,fp); err !=nil{
 			fmt.Println(err)
 			os.Exit(1)
 		}
 
-		*/
-		println("everything is ok");
+     	if err := toyInit.Wait() ; err !=nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+
 	},
 }
 
