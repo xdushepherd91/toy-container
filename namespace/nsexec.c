@@ -37,7 +37,7 @@ struct config_t {
 	char * container_root;
 	char * container_id;
 	char *namespaces;
-}
+};
 
 
 /*
@@ -59,16 +59,12 @@ struct config_t {
 #define CONTAINER_PATH      27291
 #define CONTAINER_ID        27292
 
+
 #define PATH_MAX            260
 
 
 
 
-uint32_t readint32(char *buf)
-
-{
-	return *(uint32_t *) buf;
-}
 
 void nl_parse(int fd ,struct config_t * config){
     size_t len,size;
@@ -98,7 +94,7 @@ void nl_parse(int fd ,struct config_t * config){
 		/* Handle payload. */
 		switch (nlattr->nla_type) {
 		case CLONE_FLAGS_ATTR:
-			config->cloneflags = readint32(current);
+			config->cloneflags = *(uint32_t *) current;
 			break;
 		case PID_PATH:
 			config->pidpath = current;
@@ -223,12 +219,12 @@ void join_namespaces(char *nslist)
 		/* Split 'ns:path'. */
 		path = strstr(namespace, ":");
 		if (!path)
-			perror("failed to parse %s", namespace);
+			perror("failed to parse ");
 		*path++ = '\0';
 
 		fd = fopen(path, "r");
 		if (fd < 0)
-			perror("failed to open %s", path);
+			perror("failed to open ");
 
 		ns->fd = fd;
 		ns->ns = nsflag(namespace);
@@ -250,7 +246,7 @@ void join_namespaces(char *nslist)
 		struct namespace_t ns = namespaces[i];
 
 		if (setns(ns.fd, ns.ns) < 0)
-			bail("failed to setns to %s", ns.path);
+			perror("failed to setns to ");
 
 		close(ns.fd);
 	}
@@ -311,7 +307,7 @@ void nsexec(void){
         case 1:
             sethostname(config.container_id,10);
             if(!exec){
-                if (mount("proc", , "proc", 0, NULL) !=0 ) {
+                if (mount("proc",strcat(container_root,"/proc"),  "proc", 0, NULL) !=0 ) {
                      perror("proc");
                 }
                 if (mount("sysfs", strcat(container_root,"/sys"), "sysfs", 0, NULL)!=0) {
@@ -342,7 +338,7 @@ void nsexec(void){
             setenv("PS1", "[\\u@\\H \\W] #", 0);
             execv(child_args[0], child_args);
 
-            free(config.data)
+            free(config.data);
             return;
         }
     }
