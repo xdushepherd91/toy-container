@@ -10,8 +10,8 @@
 #include <setjmp.h>
 #include <sys/mount.h>
 
-#include <stdint.h>
 
+#include <stdint.h>
 #include <linux/netlink.h>
 
 #define STACK_SIZE (1024 * 1024)
@@ -59,10 +59,6 @@ struct config_t {
 #define CONTAINER_PATH      27291
 #define CONTAINER_ID        27292
 
-
-
-
-
 #define MAX_PATH            260
 
 
@@ -73,7 +69,6 @@ uint32_t readint32(char *buf)
 {
 	return *(uint32_t *) buf;
 }
-
 
 void nl_parse(int fd ,struct config_t * config){
     size_t len,size;
@@ -192,7 +187,6 @@ int nsflag(char *name)
 	/* If we don't recognise a name, fallback to 0. */
 	return 0;
 }
-
 
 
 void join_namespaces(char *nslist)
@@ -315,27 +309,28 @@ void nsexec(void){
             }
         }
         case 1:
-            sethostname(config.container_id,10);
+            int result = sethostname(config.container_id,10);
             if(!exec){
-                if (mount("proc",strcat(container_root,"/proc"）, "proc", 0, NULL) !=0 ) {
+                if (mount("proc", strcat(container_root,"/proc"）, "proc", 0, NULL) !=0 ) {
                      perror("proc");
                 }
-                if (mount("sysfs",strcat(container_root,"/sys"）, "sysfs", 0, NULL)!=0) {
+                if (mount("sysfs", strcat(container_root,"/sys"）, "sysfs", 0, NULL)!=0) {
                       perror("sys");
                 }
-                if (mount("none",strcat(container_root,"/tmp"）, "tmpfs", 0, NULL)!=0) {
+                if (mount("none", strcat(container_root,"/tmp"）, "tmpfs", 0, NULL)!=0) {
                     perror("tmp");
                 }
-                if (mount("udev",strcat(container_root,"/dev"）, "devtmpfs", 0, NULL)!=0) {
+                if (mount("udev", strcat(container_root,"/dev"）, "devtmpfs", 0, NULL)!=0) {
                    perror("dev");
                 }
-                if (mount("devpts",strcat(container_root,"/dev/pts"）, "devpts", 0, NULL)!=0) {
+                if (mount("devpts", strcat(container_root,"/dev/pts"）, "devpts", 0, NULL)!=0) {
                     perror("dev/pts");
                 }
-                if (mount("shm",strcat(container_root,"/dev/shm"）,"tmpfs", 0, NULL)!=0) {
+                if (mount("shm", strcat(container_root,"/dev/shm"）, "tmpfs", 0, NULL)!=0) {
                     perror("dev/shm");
                 }
-                if (mount("tmpfs",strcat(container_root,"/run"）, "tmpfs", 0, NULL)!=0) {
+                if (mount("tmpfs", strcat(container_root,"/run"）, "tmpfs", 0, NULL)!=0) {
+
                     perror("run");
                 }
             }
