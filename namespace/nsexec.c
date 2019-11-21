@@ -304,7 +304,7 @@ void nsexec(void){
                 exit(0);
             }
         }
-        case 1:
+        case 1:{
             sethostname(config.container_id,10);
             if(!exec){
                 if (mount("proc",strcat(container_root,"/proc"),  "proc", 0, NULL) !=0 ) {
